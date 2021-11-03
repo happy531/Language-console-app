@@ -1,6 +1,6 @@
 [
   {
-    "language_name": "english",
+    "language_name": "English",
     "words": [
       "a",
       "abandon",
@@ -44,6 +44,12 @@
       "add",
       "addition",
       "additional"
+    ]
+  },
+  {
+    "language_name": "Polish",
+    "words": [
+      "a"
     ]
   }
 ]
