@@ -12,10 +12,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("Shutdown hook ran!")));
-
         while (true) {
+            System.out.println("");
             System.out.println("1. Search");
             System.out.println("2. Add language and words");
             System.out.println("3. Exit");
@@ -33,6 +31,7 @@ public class Main {
                     break;
                 case "3":
                     System.out.println("exiting...");
+                    break;
                 default:
                     System.out.println("Wrong option");
 
@@ -56,18 +55,9 @@ public class Main {
         System.out.print("Type word you're interested in: ");
         String inputWord = sc.next();
 
-        List<String> validLanguages = new ArrayList<>();
+        Parser parser = new Parser(languages);
 
-        for (Language language : languages) {
-            for (String word : language.getWords()) {
-                if (inputWord.equals(word)) {
-                    validLanguages.add(language.getLanguage_name());
-                    break;
-                }
-            }
-        }
-        if (validLanguages.size() > 0) System.out.println("This word appears in this languages: " + validLanguages);
-        else System.out.println("There's no such word in any language");
+        System.out.println(parser.searchWord(inputWord));
     }
 
     private static void serialize() throws IOException {
@@ -75,13 +65,11 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("language name: ");
-        String inputLanguage = sc.nextLine();
+        String languageName = sc.nextLine();
 
         System.out.println("words (separated with space): ");
         String words = sc.nextLine();
-        List<String> inputWords = Arrays.asList(words.split(" "));
-
-        Language userAddedLanguage = new Language(inputLanguage, inputWords);
+        List<String> wordsList = Arrays.asList(words.split(" "));
 
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -90,13 +78,10 @@ public class Main {
         Type languagesListType = new TypeToken<ArrayList<Language>>(){}.getType();
         List<Language> languages = gson.fromJson(new FileReader(
                 "C:\\Users\\jedrz\\IdeaProjects\\iteration\\src\\main\\java\\api.json"), languagesListType);
-        languages.add(userAddedLanguage);
 
-        Writer writer = new FileWriter("C:\\Users\\jedrz\\IdeaProjects\\iteration\\src\\main\\java\\api.json");
-        gson.toJson(languages, writer);
-        writer.flush();
-        writer.close();
+        Parser parser = new Parser(languages);
 
+        parser.addLanguage(languageName, wordsList);
 
     }
 }
