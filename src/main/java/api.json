@@ -45,5 +45,23 @@
       "addition",
       "additional"
     ]
+  },
+  {
+    "language_name": "german",
+    "words": [
+      "ich",
+      "du",
+      "bist",
+      "a"
+    ]
+  },
+  {
+    "language_name": "polish",
+    "words": [
+      "a",
+      "kurwa",
+      "mac",
+      "jebac"
+    ]
   }
 ]

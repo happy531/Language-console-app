@@ -1,6 +1,11 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,6 +23,8 @@ public class Main {
                 .setPrettyPrinting()
                 .create();
 
+        Statistics stats = new Statistics();
+
         Type languagesListType = new TypeToken<ArrayList<Language>>() {
         }.getType();
 
@@ -34,6 +41,11 @@ public class Main {
             System.out.print("Choose action: ");
             String userChoice = sc.next();
 
+            if (userChoice.equals("3")) {
+                saveToPDF(stats);
+                break;
+            }
+
             switch (userChoice) {
                 //deserialize
                 case "1" -> {
@@ -49,16 +61,49 @@ public class Main {
                     System.out.println("language name: ");
                     String languageName = sc2.nextLine();
 
+                    stats.addLanguageToStack(languageName);
+
                     System.out.println("words (separated with space): ");
                     String words = sc2.nextLine();
                     List<String> wordsList = Arrays.asList(words.split(" "));
 
+                    stats.incrementNumOfWords(wordsList.size());
+
                     parser.addLanguage(languageName, wordsList);
                 }
-                case "3" -> System.out.println("exiting...");
                 default -> System.out.println("Wrong option");
             }
         }
     }
+
+    private static void saveToPDF(Statistics stats) throws IOException {
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        String text = "You added " + stats.getNumOfGivenWords() + " words from this languages: " + stats.getLanguageNames();
+
+        PDFont font = PDType1Font.HELVETICA_BOLD;
+        int fontSize = 16;
+        int marginTop = 30;
+        float titleWidth = font.getStringWidth(text) / 1000 * fontSize;
+        float titleHeight = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
+
+
+        contentStream.setFont(font, fontSize);
+        contentStream.beginText();
+        contentStream.newLineAtOffset((page.getMediaBox().getWidth() - titleWidth) / 2,
+                page.getMediaBox().getHeight() - marginTop - titleHeight);
+        contentStream.showText(text);
+        contentStream.endText();
+        contentStream.close();
+
+        document.save("C:\\Users\\jedrz\\IdeaProjects\\iteration\\src\\main\\java\\stats.pdf");
+        document.close();
+    }
 }
+
+
 
