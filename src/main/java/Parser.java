@@ -4,8 +4,8 @@ import com.google.gson.GsonBuilder;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Parser {
     private final List<Language> languages;
@@ -15,16 +15,12 @@ public class Parser {
     }
 
     public String searchWord(String inputWord) {
-        List<String> validLanguages = new ArrayList<>();
+        List<String> validLanguages = this.languages
+                .stream()
+                .filter(language -> language.getWords().contains(inputWord))
+                .map(Language::getLanguage_name)
+                .collect(Collectors.toList());
 
-        for (Language language : this.languages) {
-            for (String word : language.getWords()) {
-                if (inputWord.equals(word)) {
-                    validLanguages.add(language.getLanguage_name());
-                    break;
-                }
-            }
-        }
         if (validLanguages.size() > 0) return "This word appears in this languages: " + validLanguages;
         else return "There's no such word in any language";
     }

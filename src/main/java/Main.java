@@ -13,14 +13,15 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        while (true) {
-            Scanner sc = new Scanner(System.in);
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create();
+        Scanner sc = new Scanner(System.in);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
 
-            Type languagesListType = new TypeToken<ArrayList<Language>>() {
-            }.getType();
+        Type languagesListType = new TypeToken<ArrayList<Language>>() {
+        }.getType();
+
+        while (true) {
             List<Language> languages = gson.fromJson(new FileReader(
                     "C:\\Users\\jedrz\\IdeaProjects\\iteration\\src\\main\\java\\api.json"), languagesListType);
 
