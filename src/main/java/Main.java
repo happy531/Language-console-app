@@ -25,7 +25,7 @@ public class Main {
 
         while (true) {
             List<Language> languages = gson.fromJson(new FileReader(
-                    "C:\\Users\\jedrz\\IdeaProjects\\iteration\\src\\main\\java\\api.json"), languagesListType);
+                    "./src/main/api.json"), languagesListType);
 
             Parser parser = new Parser(languages);
 

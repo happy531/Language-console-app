@@ -32,7 +32,7 @@ public class PDFWriter {
         contentStream.endText();
         contentStream.close();
 
-        document.save("C:\\Users\\jedrz\\IdeaProjects\\iteration\\src\\main\\java\\stats.pdf");
+        document.save("./src/main/stats.pdf");
         document.close();
     }
 }

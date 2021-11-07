@@ -34,7 +34,7 @@ public class Parser {
 
         this.languages.add(userAddedLanguage);
 
-        Writer writer = new FileWriter("C:\\Users\\jedrz\\IdeaProjects\\iteration\\src\\main\\java\\api.json");
+        Writer writer = new FileWriter("./src/main/api.json");
         gson.toJson(this.languages, writer);
         writer.flush();
         writer.close();
